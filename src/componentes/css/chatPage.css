@@ -1,0 +1,94 @@
+.chat-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #e0e0e0;
+  transition: background-color 0.2s ease;
+}
+
+.chat-item.active {
+  background-color: #2d2d2d;
+}
+
+.chat-item:hover {
+  background-color: #3a3a3a !important;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  background-color: #555;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #fff;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.chat-info {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.chat-name {
+  font-weight: 600;
+  color: #ddd;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-msg {
+  font-size: 0.9em;
+  color: #aaa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-time {
+  font-size: 0.75em;
+  color: #666;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
+/* Scrollbar dark */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
+}
+
+/* Input placeholders mais suaves */
+input::placeholder,
+textarea::placeholder {
+  color: #999;
+}
+
+/* Campo de input no modo dark */
+input,
+textarea {
+  background-color: #1e1e2f;
+  color: #eee;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 10px 14px;
+  outline: none;
+}
+
+/* Foco suave */
+input:focus,
+textarea:focus {
+  border-color: #4b5fff;
+  box-shadow: 0 0 0 2px #4b5fff40;
+}
