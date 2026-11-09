@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/chatPage.css">
+</head>
+<body>
+    <div class="d-flex vh-100 bg-black text-light">
+        <!-- Barra lateral -->
+        <div class="d-flex flex-column w-25 h-100 p-4 bg-dark border-end">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="text-start mb-4 text-light">Chat</h2>
+            </div>
+            <ul id="lista-chats" class="list-unstyled"></ul>
+        </div>
+
+        <!-- Área de mensagens -->
+        <div class="d-flex flex-column w-75 h-100 p-4 bg-dark">
+            <h4 class="text-center mb-4 text-light">Mensagens</h4>
+
+            <div id="mensagens" class="flex-grow-1 overflow-auto mb-3 px-2"></div>
+
+            <form id="form-envio" class="d-flex mt-auto">
+                <input
+                    id="input-mensagem"
+                    type="text"
+                    class="form-control me-2 bg-secondary text-light border-0 rounded-pill px-4"
+                    placeholder="Digite sua mensagem..."
+                    autocomplete="off"
+                >
+                <button class="btn btn-primary px-4 rounded-pill">Enviar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="chat.js"></script>
+</body>
+</html>
