@@ -16,6 +16,7 @@ const server = http.createServer(app);
 // ---------- WebSocket: usa o mesmo servidor/porta ----------
 const wss = new WebSocketServer({ server });
 const users = new Map(); // username -> { socket, online }
+const pendentes = new Map(); // username -> [mensagens pendentes]
 
 function enviar(client, payload) {
   if (client && client.readyState === WebSocket.OPEN) {
@@ -46,10 +47,14 @@ wss.on('connection', (ws) => {
       }
 
       const onlineUsers = Array.from(users.entries())
-        .filter(([name, userData]) => name !== username)
+        .filter(([name]) => name !== username)
         .map(([name, userData]) => ({ username: name, online: userData.online }));
 
       enviar(ws, { type: 'online_list', users: onlineUsers });
+
+      const fila = pendentes.get(username) || [];
+      fila.forEach((m) => enviar(ws, m));
+      pendentes.delete(username);
 
       // Notifica os outros
       wss.clients.forEach((client) => {
@@ -60,11 +65,17 @@ wss.on('connection', (ws) => {
     }
 
     // Mensagem privada: vai só para quem enviou e para o destinatário
+    // Mensagem privada: vai para quem enviou e para o destinatário
     if (data.to) {
       enviar(ws, msg.toString());
+
       const destino = users.get(data.to);
-      if (destino && destino.online && destino.socket !== ws) {
-        enviar(destino.socket, msg.toString());
+      if (destino && destino.online) {
+        if (destino.socket !== ws) enviar(destino.socket, msg.toString());
+      } else {
+        // Destinatário offline: guarda para entregar depois
+        if (!pendentes.has(data.to)) pendentes.set(data.to, []);
+        pendentes.get(data.to).push(msg.toString());
       }
       return;
     }

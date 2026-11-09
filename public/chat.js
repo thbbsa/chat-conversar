@@ -6,7 +6,26 @@ if (!username) {
 }
 
 // ---------- Estado ----------
-let conversas = {};            // { chatId: [mensagens] }
+const CHAVE_CONVERSAS = `conversas:${username}`;
+
+function carregarConversas() {
+    try {
+        return JSON.parse(localStorage.getItem(CHAVE_CONVERSAS)) || {};
+    } catch {
+        return {};
+    }
+}
+
+function salvarConversas() {
+    try {
+        localStorage.setItem(CHAVE_CONVERSAS, JSON.stringify(conversas));
+    } catch (err) {
+        console.error('Erro ao salvar conversas:', err);
+    }
+}
+
+let conversas = carregarConversas();   // { chatId: [mensagens] }
+
 let chatAtualId = 'global';
 let usuarios = {};             // { nome: true/false }  (true = online)
 let notificacoes = {};         // { chatId: quantidade }
@@ -185,6 +204,7 @@ function conectar() {
 
         if (!conversas[chatId]) conversas[chatId] = [];
         conversas[chatId].push(dados);
+        salvarConversas();
 
         if (chatId === chatAtualId) {
             // Mensagem do chat aberto: só atualiza a tela, sem notificar
