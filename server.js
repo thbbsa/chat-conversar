@@ -46,8 +46,8 @@ wss.on('connection', (ws) => {
       }
 
       const onlineUsers = Array.from(users.entries())
-        .filter(([name, userData]) => userData.online && name !== username)
-        .map(([name]) => name);
+        .filter(([name, userData]) => name !== username)
+        .map(([name, userData]) => ({ username: name, online: userData.online }));
 
       enviar(ws, { type: 'online_list', users: onlineUsers });
 

@@ -5,10 +5,10 @@ if (!username) {
     window.location.href = 'index.html';
 }
 
-// ---------- Estado (antes eram useState / useRef) ----------
+// ---------- Estado ----------
 let conversas = {};            // { chatId: [mensagens] }
 let chatAtualId = 'global';
-let usuariosOnline = [];
+let usuarios = {};             // { nome: true/false }  (true = online)
 let notificacoes = {};         // { chatId: quantidade }
 let ws = null;
 
@@ -37,7 +37,7 @@ function criarEl(tag, classes = '', texto = '') {
 }
 
 // ---------- Renderização ----------
-function criarItemChat({ inicial, titulo, subtitulo, ativo, notificacao, onClick }) {
+function criarItemChat({ inicial, titulo, subtitulo, online, ativo, notificacao, onClick }) {
     const li = criarEl(
         'li',
         `chat-item d-flex align-items-center p-3 rounded bg-secondary bg-opacity-25 mb-3 ${ativo ? 'bg-opacity-50' : ''}`
@@ -45,10 +45,21 @@ function criarItemChat({ inicial, titulo, subtitulo, ativo, notificacao, onClick
     li.style.cursor = 'pointer';
     li.addEventListener('click', onClick);
 
-    const avatar = criarEl('div', 'avatar rounded-circle me-3 text-center bg-light text-dark fw-bold', inicial);
+    const avatar = criarEl('div', 'avatar position-relative rounded-circle me-3 text-center bg-light text-dark fw-bold', inicial);
     avatar.style.width = '45px';
     avatar.style.height = '45px';
     avatar.style.lineHeight = '45px';
+
+    // Bolinha de status (o chat global não passa "online", então fica sem)
+    if (online !== undefined) {
+        const bolinha = criarEl(
+            'span',
+            `position-absolute bottom-0 end-0 rounded-circle border border-dark ${online ? 'bg-success' : 'bg-secondary'}`
+        );
+        bolinha.style.width = '12px';
+        bolinha.style.height = '12px';
+        avatar.appendChild(bolinha);
+    }
 
     const conteudo = criarEl('div', 'flex-grow-1 d-flex justify-content-between align-items-center');
     const textos = criarEl('div');
@@ -84,26 +95,29 @@ function renderSidebar() {
         })
     );
 
-    // Chats privados
-    usuariosOnline.forEach((usuario) => {
-        const chatIdPrivado = gerarIdChat(username, usuario);
+    // Chats privados (online primeiro)
+    Object.entries(usuarios)
+        .sort((a, b) => Number(b[1]) - Number(a[1]))
+        .forEach(([usuario, online]) => {
+            const chatIdPrivado = gerarIdChat(username, usuario);
 
-        listaChats.appendChild(
-            criarItemChat({
-                inicial: usuario.charAt(0).toUpperCase(),
-                titulo: usuario,
-                subtitulo: 'Conversa privada',
-                ativo: chatAtualId === chatIdPrivado,
-                notificacao: notificacoes[chatIdPrivado] || 0,
-                onClick: () => {
-                    chatAtualId = chatIdPrivado;
-                    delete notificacoes[chatIdPrivado];
-                    renderSidebar();
-                    renderMensagens();
-                }
-            })
-        );
-    });
+            listaChats.appendChild(
+                criarItemChat({
+                    inicial: usuario.charAt(0).toUpperCase(),
+                    titulo: usuario,
+                    subtitulo: online ? 'Online' : 'Offline',
+                    online,
+                    ativo: chatAtualId === chatIdPrivado,
+                    notificacao: notificacoes[chatIdPrivado] || 0,
+                    onClick: () => {
+                        chatAtualId = chatIdPrivado;
+                        delete notificacoes[chatIdPrivado];
+                        renderSidebar();
+                        renderMensagens();
+                    }
+                })
+            );
+        });
 }
 
 function renderMensagens() {
@@ -145,22 +159,24 @@ function conectar() {
     ws.onmessage = (event) => {
         const dados = JSON.parse(event.data);
 
+        // Lista inicial: todos os usuários conhecidos, com o status de cada um
         if (dados.type === 'online_list') {
-            usuariosOnline = dados.users.filter((u) =>u !== username);
+            usuarios = {};
+            dados.users.forEach((u) => (usuarios[u.username] = u.online));
             renderSidebar();
             return;
         }
 
         if (dados.type === 'user_online') {
             if (dados.username !== username) {
-                usuariosOnline = [...new Set([...usuariosOnline, dados.username])];
+                usuarios[dados.username] = true;
                 renderSidebar();
             }
             return;
         }
 
         if (dados.type === 'user_offline') {
-            usuariosOnline = usuariosOnline.filter((u) => u !== dados.username);
+            usuarios[dados.username] = false;   // continua na lista, só muda o status
             renderSidebar();
             return;
         }
@@ -206,7 +222,7 @@ formEnvio.addEventListener('submit', (e) => {
     inputMensagem.value = '';
 });
 
-// Fecha a conexão ao sair da página (equivale ao cleanup do useEffect)
+// Fecha a conexão ao sair da página
 window.addEventListener('beforeunload', () => {
     if (ws) ws.close();
 });
