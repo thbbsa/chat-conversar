@@ -1,13 +1,38 @@
+import express from 'express';
+import http from 'http';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { WebSocketServer, WebSocket } from 'ws';
 
-const wss = new WebSocketServer({ port: 8080 });
-const users = new Map(); // Corrigido
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const PORT = 8080;
+
+// ---------- HTTP: serve o site (pasta public) ----------
+const app = express();
+app.use(express.static(path.join(__dirname, 'public')));
+
+const server = http.createServer(app);
+
+// ---------- WebSocket: usa o mesmo servidor/porta ----------
+const wss = new WebSocketServer({ server });
+const users = new Map(); // username -> { socket, online }
+
+function enviar(client, payload) {
+  if (client && client.readyState === WebSocket.OPEN) {
+    client.send(typeof payload === 'string' ? payload : JSON.stringify(payload));
+  }
+}
 
 wss.on('connection', (ws) => {
   let username = null;
 
   ws.on('message', (msg) => {
-    const data = JSON.parse(msg); // Corrigido
+    let data;
+    try {
+      data = JSON.parse(msg);
+    } catch {
+      return; // ignora mensagens que não são JSON
+    }
 
     if (data.type === 'register') {
       username = data.username;
@@ -17,56 +42,53 @@ wss.on('connection', (ws) => {
         user.socket = ws;
         user.online = true;
       } else {
-        users.set(username, {
-          socket: ws,
-          online: true
-        });
+        users.set(username, { socket: ws, online: true });
       }
 
       const onlineUsers = Array.from(users.entries())
         .filter(([name, userData]) => userData.online && name !== username)
         .map(([name]) => name);
 
-      ws.send(JSON.stringify({
-        type: 'online_list',
-        users: onlineUsers
-      }));
+      enviar(ws, { type: 'online_list', users: onlineUsers });
 
       // Notifica os outros
       wss.clients.forEach((client) => {
-        if (client !== ws && client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify({
-            type: 'user_online',
-            username: username
-          }));
-        }
+        if (client !== ws) enviar(client, { type: 'user_online', username });
       });
 
       return;
     }
 
-    // Broadcast geral
-    wss.clients.forEach((client) => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(msg.toString());
+    // Mensagem privada: vai só para quem enviou e para o destinatário
+    if (data.to) {
+      enviar(ws, msg.toString());
+      const destino = users.get(data.to);
+      if (destino && destino.online && destino.socket !== ws) {
+        enviar(destino.socket, msg.toString());
       }
-    });
+      return;
+    }
+
+    // Chat global: broadcast para todos
+    wss.clients.forEach((client) => enviar(client, msg.toString()));
   });
 
   ws.on('close', () => {
-    if (username && users.has(username)) {
-      const user = users.get(username);
-      user.online = false;
+    if (!username || !users.has(username)) return;
 
-      // Notificar que ficou offline
-      wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify({
-            type: 'user_offline',
-            username: username
-          }));
-        }
-      });
-    }
+    const user = users.get(username);
+
+    // Se o usuário já reconectou com outro socket, não marca como offline
+    if (user.socket !== ws) return;
+
+    user.online = false;
+
+    wss.clients.forEach((client) => {
+      enviar(client, { type: 'user_offline', username });
+    });
   });
+});
+
+server.listen(PORT, () => {
+  console.log(`Site e WebSocket rodando em http://localhost:${PORT}`);
 });

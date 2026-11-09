@@ -1,4 +1,5 @@
 const username = localStorage.getItem('username');
+
 if (!username) {
     // Sem nome salvo, volta para o login
     window.location.href = 'index.html';
@@ -145,7 +146,7 @@ function conectar() {
         const dados = JSON.parse(event.data);
 
         if (dados.type === 'online_list') {
-            usuariosOnline = dados.users.filter((u) => u !== username);
+            usuariosOnline = dados.users.filter((u) =>u !== username);
             renderSidebar();
             return;
         }
