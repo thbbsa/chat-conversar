@@ -5,8 +5,9 @@ if (!username) {
     window.location.href = 'index.html';
 }
 
-// ---------- Estado ----------
+// ---------- Cache no localStorage ----------
 const CHAVE_CONVERSAS = `conversas:${username}`;
+const CHAVE_ID = `userId:${username}`;
 
 function carregarConversas() {
     try {
@@ -24,12 +25,14 @@ function salvarConversas() {
     }
 }
 
+// ---------- Estado ----------
 let conversas = carregarConversas();   // { chatId: [mensagens] }
-
 let chatAtualId = 'global';
-let usuarios = {};             // { nome: true/false }  (true = online)
-let notificacoes = {};         // { chatId: quantidade }
+let usuarios = {};                     // { nome: { id, online } }
+let notificacoes = {};                 // { chatId: quantidade }
 let ws = null;
+
+let myUserId = Number(localStorage.getItem(CHAVE_ID)) || null;
 
 // ---------- Elementos ----------
 const listaChats = document.getElementById('lista-chats');
@@ -38,8 +41,14 @@ const formEnvio = document.getElementById('form-envio');
 const inputMensagem = document.getElementById('input-mensagem');
 
 // ---------- Utilitários ----------
-function gerarIdChat(userA, userB) {
-    return [userA, userB].sort().join('-');
+function gerarIdChat(idA, idB) {
+    return [idA, idB].sort((a, b) => a - b).join('-');
+}
+
+// Descobre o nome de quem enviou a partir do id
+function nomePorId(id) {
+    if (id === myUserId) return username;
+    return Object.keys(usuarios).find((nome) => usuarios[nome].id === id) || 'Desconhecido';
 }
 
 function audioNotificacao() {
@@ -108,6 +117,7 @@ function renderSidebar() {
             notificacao: notificacoes['global'] || 0,
             onClick: () => {
                 chatAtualId = 'global';
+                delete notificacoes['global'];
                 renderSidebar();
                 renderMensagens();
             }
@@ -116,16 +126,16 @@ function renderSidebar() {
 
     // Chats privados (online primeiro)
     Object.entries(usuarios)
-        .sort((a, b) => Number(b[1]) - Number(a[1]))
-        .forEach(([usuario, online]) => {
-            const chatIdPrivado = gerarIdChat(username, usuario);
+        .sort((a, b) => Number(b[1].online) - Number(a[1].online))
+        .forEach(([usuario, dadosUsuario]) => {
+            const chatIdPrivado = gerarIdChat(myUserId, dadosUsuario.id);
 
             listaChats.appendChild(
                 criarItemChat({
                     inicial: usuario.charAt(0).toUpperCase(),
                     titulo: usuario,
-                    subtitulo: online ? 'Online' : 'Offline',
-                    online,
+                    subtitulo: dadosUsuario.online ? 'Online' : 'Offline',
+                    online: dadosUsuario.online,
                     ativo: chatAtualId === chatIdPrivado,
                     notificacao: notificacoes[chatIdPrivado] || 0,
                     onClick: () => {
@@ -143,7 +153,7 @@ function renderMensagens() {
     areaMensagens.innerHTML = '';
 
     (conversas[chatAtualId] || []).forEach((msg) => {
-        const minha = msg.sender === username;
+        const minha = msg.remetenteId === myUserId; // compara pelo id, não pelo nome
 
         const linha = criarEl('div', `d-flex ${minha ? 'justify-content-end' : 'justify-content-start'} mb-2`);
 
@@ -155,8 +165,8 @@ function renderMensagens() {
         balao.style.maxWidth = '75%';
         balao.style.wordBreak = 'break-word';
 
-        balao.appendChild(criarEl('strong', '', `${msg.sender}:`));
-        balao.appendChild(document.createTextNode(` ${msg.content}`));
+        balao.appendChild(criarEl('strong', '', `${nomePorId(msg.remetenteId)}:`));
+        balao.appendChild(document.createTextNode(` ${msg.conteudo}`));
         balao.appendChild(criarEl('div', 'text-end text-light opacity-50 small mt-1', msg.timestamp));
 
         linha.appendChild(balao);
@@ -178,38 +188,65 @@ function conectar() {
     ws.onmessage = (event) => {
         const dados = JSON.parse(event.data);
 
-        // Lista inicial: todos os usuários conhecidos, com o status de cada um
+        // Lista inicial: todos os usuários cadastrados, com o status de cada um
         if (dados.type === 'online_list') {
             usuarios = {};
-            dados.users.forEach((u) => (usuarios[u.username] = u.online));
+            myUserId = dados.id;
+            localStorage.setItem(CHAVE_ID, String(myUserId));
+
+            dados.users.forEach((u) => {
+                usuarios[u.username] = { id: u.id, online: u.online };
+            });
             renderSidebar();
+            return;
+        }
+
+        // Histórico completo vindo do servidor: substitui o que havia no cache
+        if (dados.type === 'historico') {
+            conversas = {};
+
+            dados.mensagens.forEach((msg) => {
+                if (!conversas[msg.chatId]) conversas[msg.chatId] = [];
+                conversas[msg.chatId].push(msg);
+            });
+
+            salvarConversas();
+            renderSidebar();
+            renderMensagens();
             return;
         }
 
         if (dados.type === 'user_online') {
             if (dados.username !== username) {
-                usuarios[dados.username] = true;
+                usuarios[dados.username] = { id: dados.id, online: true };
                 renderSidebar();
             }
             return;
         }
 
         if (dados.type === 'user_offline') {
-            usuarios[dados.username] = false;   // continua na lista, só muda o status
+            if (usuarios[dados.username]) {
+                usuarios[dados.username].online = false;
+            }
             renderSidebar();
             return;
         }
 
+        // ---------- Mensagem nova ----------
         const { chatId } = dados;
 
         if (!conversas[chatId]) conversas[chatId] = [];
+
+        // Ignora se essa mensagem já foi recebida (evita duplicar)
+        if (conversas[chatId].some((m) => m.id === dados.id)) return;
+
         conversas[chatId].push(dados);
         salvarConversas();
 
         if (chatId === chatAtualId) {
             // Mensagem do chat aberto: só atualiza a tela, sem notificar
             renderMensagens();
-        } else if (dados.sender !== username) {
+        } else if (dados.remetenteId !== myUserId) {
             notificacoes[chatId] = (notificacoes[chatId] || 0) + 1;
             renderSidebar();
             audioNotificacao();
@@ -227,18 +264,14 @@ formEnvio.addEventListener('submit', (e) => {
     const texto = inputMensagem.value;
     if (texto.trim() === '' || !ws || ws.readyState !== WebSocket.OPEN) return;
 
-    const chatId = chatAtualId;
-    const destinatario = chatId === 'global' ? null : chatId.replace(username, '').replace('-', '');
+    // Descobre o nome do destinatário a partir do chat aberto
+    const destinatario = chatAtualId === 'global'
+        ? null
+        : Object.keys(usuarios).find(
+            (nome) => gerarIdChat(myUserId, usuarios[nome].id) === chatAtualId
+        );
 
-    const novaMensagem = {
-        sender: username,
-        content: texto,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        chatId,
-        to: destinatario
-    };
-
-    ws.send(JSON.stringify(novaMensagem));
+    ws.send(JSON.stringify({ content: texto, to: destinatario }));
     inputMensagem.value = '';
 });
 

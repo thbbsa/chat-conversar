@@ -1,0 +1,169 @@
+{
+  "proximoIdUsuario": 2,
+  "proximoIdMensagem": 17,
+  "usuarios": [
+    {
+      "id": 0,
+      "username": "thiago"
+    },
+    {
+      "id": 1,
+      "username": "kleber"
+    }
+  ],
+  "mensagens": [
+    {
+      "id": 0,
+      "chatId": "0-1",
+      "remetenteId": 1,
+      "destinatarioId": 0,
+      "conteudo": "thiago",
+      "timestamp": "16:20",
+      "data": "2026-11-09T19:20:13.647Z"
+    },
+    {
+      "id": 1,
+      "chatId": "0-1",
+      "remetenteId": 1,
+      "destinatarioId": 0,
+      "conteudo": "tudo bem ?",
+      "timestamp": "16:20",
+      "data": "2026-11-09T19:20:25.559Z"
+    },
+    {
+      "id": 2,
+      "chatId": "0-1",
+      "remetenteId": 0,
+      "destinatarioId": 1,
+      "conteudo": "sim",
+      "timestamp": "16:20",
+      "data": "2026-11-09T19:20:33.405Z"
+    },
+    {
+      "id": 3,
+      "chatId": "0-1",
+      "remetenteId": 0,
+      "destinatarioId": 1,
+      "conteudo": "estou sim",
+      "timestamp": "16:20",
+      "data": "2026-11-09T19:20:35.384Z"
+    },
+    {
+      "id": 4,
+      "chatId": "0-1",
+      "remetenteId": 0,
+      "destinatarioId": 1,
+      "conteudo": "e vc",
+      "timestamp": "16:20",
+      "data": "2026-11-09T19:20:36.197Z"
+    },
+    {
+      "id": 5,
+      "chatId": "global",
+      "remetenteId": 0,
+      "destinatarioId": null,
+      "conteudo": "ola",
+      "timestamp": "16:20",
+      "data": "2026-11-09T19:20:52.101Z"
+    },
+    {
+      "id": 6,
+      "chatId": "global",
+      "remetenteId": 1,
+      "destinatarioId": null,
+      "conteudo": "oii",
+      "timestamp": "16:20",
+      "data": "2026-11-09T19:20:56.138Z"
+    },
+    {
+      "id": 7,
+      "chatId": "global",
+      "remetenteId": 1,
+      "destinatarioId": null,
+      "conteudo": "bem ?",
+      "timestamp": "16:20",
+      "data": "2026-11-09T19:20:59.716Z"
+    },
+    {
+      "id": 8,
+      "chatId": "global",
+      "remetenteId": 1,
+      "destinatarioId": null,
+      "conteudo": "KKKKKKK",
+      "timestamp": "16:21",
+      "data": "2026-11-09T19:21:13.743Z"
+    },
+    {
+      "id": 9,
+      "chatId": "0-1",
+      "remetenteId": 1,
+      "destinatarioId": 0,
+      "conteudo": "KKKKKKKKKKKKKK",
+      "timestamp": "16:21",
+      "data": "2026-11-09T19:21:20.659Z"
+    },
+    {
+      "id": 10,
+      "chatId": "global",
+      "remetenteId": 1,
+      "destinatarioId": null,
+      "conteudo": "KKKKKKKKKKKK",
+      "timestamp": "16:22",
+      "data": "2026-11-09T19:22:48.341Z"
+    },
+    {
+      "id": 11,
+      "chatId": "global",
+      "remetenteId": 1,
+      "destinatarioId": null,
+      "conteudo": "KKKK",
+      "timestamp": "16:22",
+      "data": "2026-11-09T19:22:51.865Z"
+    },
+    {
+      "id": 12,
+      "chatId": "global",
+      "remetenteId": 1,
+      "destinatarioId": null,
+      "conteudo": "KKK",
+      "timestamp": "16:22",
+      "data": "2026-11-09T19:22:57.534Z"
+    },
+    {
+      "id": 13,
+      "chatId": "0-1",
+      "remetenteId": 1,
+      "destinatarioId": 0,
+      "conteudo": "OO",
+      "timestamp": "16:23",
+      "data": "2026-11-09T19:23:02.669Z"
+    },
+    {
+      "id": 14,
+      "chatId": "global",
+      "remetenteId": 1,
+      "destinatarioId": null,
+      "conteudo": "OO",
+      "timestamp": "16:23",
+      "data": "2026-11-09T19:23:07.223Z"
+    },
+    {
+      "id": 15,
+      "chatId": "global",
+      "remetenteId": 0,
+      "destinatarioId": null,
+      "conteudo": "OO",
+      "timestamp": "16:23",
+      "data": "2026-11-09T19:23:26.198Z"
+    },
+    {
+      "id": 16,
+      "chatId": "0-1",
+      "remetenteId": 0,
+      "destinatarioId": 1,
+      "conteudo": "BLL",
+      "timestamp": "16:23",
+      "data": "2026-11-09T19:23:38.384Z"
+    }
+  ]
+}
