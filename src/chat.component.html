@@ -1,0 +1,94 @@
+@if (!paginaChat) {
+  <main class="d-flex justify-content-center align-items-center vh-100 bg-black px-3">
+    <form class="login rounded-4 p-4 w-100" (submit)="autenticar($event, nome.value, senha.value)">
+      <h1 class="h2 text-center mb-4 fw-bold">{{ cadastro ? 'Criar conta' : 'Entrar no Chat' }}</h1>
+      @if (!cadastro && cadastroConcluido) {
+        <p class="text-info" role="status">Conta criada. Entre com seu nome e senha.</p>
+      }
+      <p class="small">Demonstração acadêmica. Use um nome e uma senha fictícios.</p>
+      <label for="username" class="form-label">Nome de usuário</label>
+      <input #nome id="username" class="form-control mb-3" autocomplete="username" required maxlength="40">
+      <label for="senha" class="form-label">Senha</label>
+      <input #senha id="senha" type="password" class="form-control mb-3" required maxlength="128"
+             [attr.minlength]="cadastro ? 8 : null" [attr.autocomplete]="cadastro ? 'new-password' : 'current-password'"
+             [attr.aria-describedby]="cadastro ? 'requisito-senha' : null">
+      @if (cadastro) {
+        <p id="requisito-senha" class="small">Use pelo menos 8 caracteres na senha.</p>
+      }
+      @if (erro()) {
+        <p class="text-warning" role="alert">{{ erro() }}</p>
+      }
+      <button class="btn btn-primary w-100">{{ cadastro ? 'Cadastrar' : 'Entrar' }}</button>
+      <a class="d-block text-center link-light mt-3" [href]="cadastro ? '/login' : '/cadastro'">
+        {{ cadastro ? 'Já tenho conta' : 'Criar uma conta' }}
+      </a>
+    </form>
+  </main>
+} @else if (username()) {
+  <main class="layout d-flex vh-100 bg-dark text-light">
+    <aside class="sidebar d-flex flex-column p-3 p-md-4 border-end border-secondary">
+      <h1 class="h2 mb-4">Chat</h1>
+      <ul class="list-unstyled overflow-auto">
+        <li>
+          <button class="chat-item" [class.ativo]="chatAtual() === 'global'" (click)="selecionar('global')">
+            <span class="avatar">G</span>
+            <span class="chat-label"><strong>Chat Global</strong><small>Converse com todos</small></span>
+            @if (notificacoes()['global']; as total) {
+              <span class="badge bg-danger">{{ total }}</span>
+            }
+          </button>
+        </li>
+        @for (usuario of lista(); track usuario.id) {
+          @let id = idPrivado(usuario);
+          <li>
+            <button class="chat-item" [class.ativo]="chatAtual() === id" (click)="selecionar(id)">
+              <span class="avatar">{{ usuario.username.charAt(0).toUpperCase() }}</span>
+              <span class="chat-label">
+                <strong>{{ usuario.username }}</strong>
+                <small [class.text-success]="usuario.online">{{ usuario.online ? 'Online' : 'Offline' }}</small>
+              </span>
+              @if (notificacoes()[id]; as total) {
+                <span class="badge bg-danger">{{ total }}</span>
+              }
+            </button>
+          </li>
+        }
+      </ul>
+    </aside>
+
+    <section class="conversa d-flex flex-column flex-grow-1 p-3 p-md-4">
+      <header class="d-flex align-items-center justify-content-between gap-2 mb-3">
+        <h2 class="h4 mb-0">Mensagens</h2>
+        <button class="btn btn-outline-light btn-sm" (click)="sair()">Sair</button>
+      </header>
+      @if (erro()) {
+        <p class="text-warning" role="alert">{{ erro() }}</p>
+      }
+      @if (!conectado()) {
+        <p class="text-warning text-center" role="status">Sem conexão com o servidor.</p>
+      }
+      <div #painel id="mensagens" class="flex-grow-1 overflow-auto mb-3 px-2" role="log">
+        @for (mensagem of mensagens(); track mensagem.id) {
+          @let minha = mensagem.remetenteId === meuId();
+          <div class="d-flex mb-2" [class.justify-content-end]="minha">
+            <div class="balao" [class.minha]="minha">
+              <strong>{{ nomePorId(mensagem.remetenteId) }}:</strong> {{ mensagem.conteudo }}
+              <div class="text-end opacity-75 small mt-1">{{ mensagem.timestamp }}</div>
+            </div>
+          </div>
+        }
+      </div>
+      <form class="d-flex" (submit)="enviar($event, campo)">
+        <label for="input-mensagem" class="visually-hidden">Mensagem</label>
+        <input #campo id="input-mensagem" class="form-control me-2 rounded-pill"
+               placeholder="Digite sua mensagem..." autocomplete="off">
+        <button class="btn btn-primary rounded-pill" [disabled]="!conectado()">Enviar</button>
+      </form>
+    </section>
+  </main>
+} @else {
+  <main class="d-flex justify-content-center align-items-center vh-100 bg-dark text-light">
+    <p role="status">{{ erro() || 'Verificando sessão…' }}</p>
+  </main>
+}
+

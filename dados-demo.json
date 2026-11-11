@@ -1,0 +1,34 @@
+{
+  "proximoIdUsuario": 3,
+  "proximoIdMensagem": 3,
+  "usuarios": [
+    {
+      "id": 1,
+      "username": "diogo"
+    },
+    {
+      "id": 2,
+      "username": "daniel"
+    }
+  ],
+  "mensagens": [
+    {
+      "id": 1,
+      "chatId": "global",
+      "remetenteId": 1,
+      "destinatarioId": null,
+      "conteudo": "oi",
+      "timestamp": "21:00",
+      "data": "2026-11-11T00:00:09.459Z"
+    },
+    {
+      "id": 2,
+      "chatId": "global",
+      "remetenteId": 2,
+      "destinatarioId": null,
+      "conteudo": "oi",
+      "timestamp": "21:00",
+      "data": "2026-11-11T00:00:27.760Z"
+    }
+  ]
+}

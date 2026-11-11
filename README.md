@@ -1,53 +1,27 @@
-# 💬 Chat Conversar
+# Chat Conversar
 
-Aplicação de chat em tempo real, feita com **React** no front-end e **WebSocket (ws)** no back-end.
+Chat com Angular, Bootstrap, Node.js e WebSocket para um exercício acadêmico.
 
-## 🚀 Tecnologias
+## Executar
 
-- [React](https://react.dev/) 19
-- [React Router](https://reactrouter.com/)
-- [Bootstrap](https://getbootstrap.com/)
-- [ws](https://github.com/websockets/ws) — servidor WebSocket para Node.js
+Na pasta chat-conversar, execute npm.cmd start e abra http://localhost:8080/.
+Para desenvolver, execute node server.js em um terminal e npx.cmd ng serve em outro.
+Nesse modo, abra http://localhost:4200/.
 
-## 📋 Pré-requisitos
+## Cadastro e login
 
-- [Node.js](https://nodejs.org/) instalado (recomendado v18+)
+As funções ficam em src/contas.ts.
+- carregarContas usa getItem e JSON.parse para ler o array.
+- cadastrar verifica o nome, adiciona um objeto com push e salva com JSON.stringify e setItem.
+- entrar percorre as contas com for e compara nome e senha com if.
+- usuarioLogado recupera o nome salvo.
+- sair remove o nome com removeItem.
 
-## ⚙️ Instalação
+Use contas e senhas fictícias. As senhas ficam visíveis no armazenamento do navegador.
+Esse login é uma simulação acadêmica e pode ser alterado pelas ferramentas do navegador.
+As contas funcionam no navegador e endereço em que foram cadastradas.
+localhost:4200 e localhost:8080 possuem armazenamentos separados.
 
-```bash
-# Clone o repositório
-git clone https://github.com/thbbsa/chat-conversar.git
-
-# Entre na pasta
-cd chat-conversar
-
-# Instale as dependências
-npm install
-```
-
-## ▶️ Como rodar
-
-Este projeto tem duas partes que precisam rodar ao mesmo tempo, em terminais separados:
-
-**1. Servidor WebSocket**
-```bash
-node server.js
-```
-
-**2. Aplicação React**
-```bash
-npm start
-```
-
-O front-end abre em `http://localhost:3000`, conectando ao servidor WebSocket em segundo plano.
-
-## 📁 Estrutura do projeto
-├── public/        → arquivos estáticos
-├── src/             → código-fonte do React
-├── server.js          → servidor WebSocket
-└── package.json         → dependências do projeto
-
-## 📝 Sobre
-
-Projeto feito como exercício de estudo de React e comunicação em tempo real via WebSocket.
+Cadastre novamente suas contas fictícias para este modelo. O histórico da demonstração
+fica em dados-demo.json. O arquivo dados.json contém os dados da versão anterior.
+O servidor usa o nome informado pelo navegador para identificar o participante.

@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ARQUIVO = path.join(__dirname, 'dados.json');
+const ARQUIVO = path.join(__dirname, 'dados-demo.json');
 
 const DADOS_INICIAIS = {
   proximoIdUsuario: 1,
@@ -15,7 +15,6 @@ const DADOS_INICIAIS = {
 function carregarDados() {
   let texto;
 
-  // 1) Ler o arquivo
   try {
     texto = fs.readFileSync(ARQUIVO, 'utf8');
   } catch (erro) {
@@ -23,16 +22,14 @@ function carregarDados() {
       console.log('dados.json não existe, começando vazio.');
       return structuredClone(DADOS_INICIAIS);
     }
-    throw erro; // outro problema (permissão, etc.)
+    throw erro;
   }
 
-  // 2) Converter em objeto
   try {
-    // O spread completa campos que faltarem em arquivos antigos
     return { ...structuredClone(DADOS_INICIAIS), ...JSON.parse(texto) };
   } catch {
     console.error('dados.json está corrompido. Corrija ou apague o arquivo.');
-    process.exit(1); // para o servidor, para não sobrescrever nada
+    process.exit(1);
   }
 }
 
