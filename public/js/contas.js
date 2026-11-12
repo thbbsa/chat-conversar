@@ -1,7 +1,12 @@
 // Gerenciamento de contas e sessão com localStorage
-const Contas = {
+class Contas {
+
+  constructor() {
+    this.contas = this.carregarContas();
+  }
   carregarContas() {
     const texto = localStorage.getItem('contasChat');
+
     if (texto === null) return [];
     try {
       const contas = JSON.parse(texto);
@@ -10,7 +15,7 @@ const Contas = {
     } catch {
       return [];
     }
-  },
+  }
 
   cadastrar(nome, senha) {
     const username = (nome || '').trim();
@@ -21,7 +26,7 @@ const Contas = {
       return 'Digite uma senha de 8 a 128 caracteres.';
     }
 
-    const contas = this.carregarContas();
+    const contas = this.contas;
     for (const conta of contas) {
       if (conta.username.toLowerCase() === username.toLowerCase()) {
         return 'Esse nome já está cadastrado neste navegador.';
@@ -31,10 +36,10 @@ const Contas = {
     contas.push({ username, senha });
     localStorage.setItem('contasChat', JSON.stringify(contas));
     return '';
-  },
+  }
 
   entrar(nome, senha) {
-    const contas = this.carregarContas();
+    const contas = this.contas;
     const nomeNormalizado = (nome || '').trim().toLowerCase();
     for (const conta of contas) {
       if (conta.username.toLowerCase() === nomeNormalizado && conta.senha === senha) {
@@ -43,17 +48,17 @@ const Contas = {
       }
     }
     return 'Nome ou senha incorretos.';
-  },
+  }
 
   usuarioLogado() {
     const nome = localStorage.getItem('usuarioLogadoChat');
     if (!nome) return null;
-    const contas = this.carregarContas();
+    const contas = this.contas;
     for (const conta of contas) {
       if (conta.username === nome) return nome;
     }
     return null;
-  },
+  }
 
   sair() {
     localStorage.removeItem('usuarioLogadoChat');

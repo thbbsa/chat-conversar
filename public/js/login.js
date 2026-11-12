@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Se já estiver logado, redireciona para o chat
-  if (Contas.usuarioLogado()) {
+  const usuario = new Contas().usuarioLogado()
+  if (usuario) {
     window.location.replace('/chat.html');
     return;
   }
@@ -22,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     msgErro.style.display = 'none';
     msgErro.textContent = '';
 
-    const erro = Contas.entrar(inputNome.value, inputSenha.value);
+    const erro = new Contas().entrar(inputNome.value, inputSenha.value);
     if (erro) {
       msgErro.textContent = erro;
       msgErro.style.display = 'block';

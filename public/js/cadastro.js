@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     msgErro.style.display = 'none';
     msgErro.textContent = '';
 
-    const erro = Contas.cadastrar(inputNome.value, inputSenha.value);
+    const erro = new Contas().cadastrar(inputNome.value, inputSenha.value);
     if (erro) {
       msgErro.textContent = erro;
       msgErro.style.display = 'block';

@@ -1,6 +1,6 @@
 {
-  "proximoIdUsuario": 5,
-  "proximoIdMensagem": 4,
+  "proximoIdUsuario": 7,
+  "proximoIdMensagem": 5,
   "usuarios": [
     {
       "id": 1,
@@ -17,6 +17,14 @@
     {
       "id": 4,
       "username": "julio"
+    },
+    {
+      "id": 5,
+      "username": "thiago"
+    },
+    {
+      "id": 6,
+      "username": "thiagoo"
     }
   ],
   "mensagens": [
@@ -46,6 +54,15 @@
       "conteudo": "oi",
       "timestamp": "22:22",
       "data": "2026-11-12T01:22:27.198Z"
+    },
+    {
+      "id": 4,
+      "chatId": "2-5",
+      "remetenteId": 5,
+      "destinatarioId": 2,
+      "conteudo": "eeeee",
+      "timestamp": "14:54",
+      "data": "2026-11-12T17:54:01.524Z"
     }
   ]
 }

@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Verificação de sessão
-  const username = Contas.usuarioLogado();
+  const username = new Contas().usuarioLogado();
   if (!username) {
     window.location.replace('/login.html');
     return;
@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 7. Botão Sair
   btnSair.addEventListener('click', () => {
-    Contas.sair();
+    new Contas().sair();
     if (socket) socket.close();
     window.location.replace('/login.html');
   });
