@@ -1,27 +1,49 @@
 # Chat Conversar
 
-Chat com Angular, Bootstrap, Node.js e WebSocket para um exercício acadêmico.
+Chat em tempo real com **HTML5**, **CSS3**, **JavaScript puro (Vanilla JS)**, **Bootstrap**, **Node.js** e **WebSocket** para exercício acadêmico (Programação Web).
 
-## Executar
+## Como Executar
 
-Na pasta chat-conversar, execute npm.cmd start e abra http://localhost:8080/.
-Para desenvolver, execute node server.js em um terminal e npx.cmd ng serve em outro.
-Nesse modo, abra http://localhost:4200/.
+1. Instale as dependências (se ainda não tiver instalado):
+   ```bash
+   npm install
+   ```
 
-## Cadastro e login
+2. Inicie o servidor:
+   ```bash
+   npm start
+   ```
+   *(ou diretamente `node server.js`)*
 
-As funções ficam em src/contas.ts.
-- carregarContas usa getItem e JSON.parse para ler o array.
-- cadastrar verifica o nome, adiciona um objeto com push e salva com JSON.stringify e setItem.
-- entrar percorre as contas com for e compara nome e senha com if.
-- usuarioLogado recupera o nome salvo.
-- sair remove o nome com removeItem.
+3. Acesse no navegador:
+   [http://localhost:8080/](http://localhost:8080/)
 
-Use contas e senhas fictícias. As senhas ficam visíveis no armazenamento do navegador.
-Esse login é uma simulação acadêmica e pode ser alterado pelas ferramentas do navegador.
-As contas funcionam no navegador e endereço em que foram cadastradas.
-localhost:4200 e localhost:8080 possuem armazenamentos separados.
+---
 
-Cadastre novamente suas contas fictícias para este modelo. O histórico da demonstração
-fica em dados-demo.json. O arquivo dados.json contém os dados da versão anterior.
-O servidor usa o nome informado pelo navegador para identificar o participante.
+## Estrutura do Projeto
+
+- **`server.js`**: Servidor HTTP (Express) e WebSocket (porta 8080) com persistência de mensagens e controle de usuários online.
+- **`banco.js` / `dados-demo.json`**: Leitura e gravação das mensagens e usuários salvos no backend.
+- **`public/`**: Frontend em HTML5, CSS e JavaScript puro (sem necessidade de build ou compilação):
+  - `login.html` (e `index.html`): Tela de login.
+  - `cadastro.html`: Tela de criação de conta com validação de campos.
+  - `chat.html`: Interface do chat em tempo real (lista de chats, chat global, conversas privadas, mensagens com rolagem e áudio de notificação).
+  - `css/estilos.css`: Folha de estilos personalizada combinada com o Bootstrap 5.
+  - `js/contas.js`: Módulo com as regras de cadastro, login, verificação de sessão e saída usando `localStorage`.
+  - `js/login.js`: Lógica e validação da tela de login.
+  - `js/cadastro.js`: Lógica e validação da tela de criação de conta.
+  - `js/chat.js`: Lógica completa do chat com WebSocket, histórico, status online/offline e notificações.
+  - `audio/notificacao.mp3`: Efeito sonoro tocado ao receber nova mensagem.
+
+---
+
+## Cadastro e Login
+
+As funções de autenticação local ficam em `public/js/contas.js`:
+- **`carregarContas()`**: Lê as contas salvas no `localStorage` sob a chave `contasChat`.
+- **`cadastrar(nome, senha)`**: Valida tamanho do nome (3 a 40 caracteres), senha (8 a 128 caracteres), impede nomes duplicados e salva no `localStorage`.
+- **`entrar(nome, senha)`**: Valida credenciais com as contas cadastradas e salva o usuário ativo na chave `usuarioLogadoChat`.
+- **`usuarioLogado()`**: Retorna o nome do usuário logado se a sessão for válida.
+- **`sair()`**: Remove a sessão ativa do `localStorage`.
+
+> **Nota Acadêmica:** Demonstração para fins acadêmicos. As senhas ficam no armazenamento local do navegador (`localStorage`) para simulação.

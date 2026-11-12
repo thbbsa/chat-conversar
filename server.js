@@ -5,9 +5,8 @@ import { fileURLToPath } from 'node:url';
 import { WebSocketServer, WebSocket } from 'ws';
 import { dados, salvarDados } from './banco.js';
 
-
 const pasta = path.dirname(fileURLToPath(import.meta.url));
-const frontend = path.join(pasta, 'dist', 'chat-conversar', 'browser');
+const frontend = path.join(pasta, 'public');
 const porta = 8080;
 const app = express();
 const server = http.createServer(app);
@@ -15,8 +14,9 @@ const wss = new WebSocketServer({ server, path: '/ws', maxPayload: 16 * 1024 });
 const conexoes = new Map();
 
 app.use(express.static(frontend));
-app.get(['/chat', '/cadastro', '/login'], (_req, res) => res.sendFile(path.join(frontend, 'index.html')));
-app.get('/chat.html', (_req, res) => res.redirect('/chat'));
+app.get(['/', '/login'], (_req, res) => res.sendFile(path.join(frontend, 'login.html')));
+app.get('/cadastro', (_req, res) => res.sendFile(path.join(frontend, 'cadastro.html')));
+app.get(['/chat', '/chat.html'], (_req, res) => res.sendFile(path.join(frontend, 'chat.html')));
 
 function enviar(socket, payload) {
   if (socket.readyState !== WebSocket.OPEN) return;
