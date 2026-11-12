@@ -35,3 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+
+const senha = document.getElementById('senha');
+document.getElementById('btn-olho').addEventListener('click', () => {
+  senha.type = senha.type === 'password' ? 'text' : 'password';
+});
+senha.addEventListener('input', () => {
+  const v = senha.value;
+  let n = 0;
+  if (v.length >= 8) n++;
+  if (/[A-Z]/.test(v) && /[a-z]/.test(v)) n++;
+  if (/\d/.test(v) && /[^A-Za-z0-9]/.test(v)) n++;
+  document.getElementById('forca').dataset.nivel = n;
+});

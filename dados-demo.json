@@ -1,6 +1,6 @@
 {
   "proximoIdUsuario": 8,
-  "proximoIdMensagem": 5,
+  "proximoIdMensagem": 7,
   "usuarios": [
     {
       "id": 1,
@@ -67,6 +67,24 @@
       "conteudo": "eeeee",
       "timestamp": "14:54",
       "data": "2026-11-12T17:54:01.524Z"
+    },
+    {
+      "id": 5,
+      "chatId": "6-7",
+      "remetenteId": 7,
+      "destinatarioId": 6,
+      "conteudo": "oiii",
+      "timestamp": "18:27",
+      "data": "2026-11-12T21:27:57.467Z"
+    },
+    {
+      "id": 6,
+      "chatId": "6-7",
+      "remetenteId": 7,
+      "destinatarioId": 6,
+      "conteudo": "bem ????",
+      "timestamp": "18:28",
+      "data": "2026-11-12T21:28:04.084Z"
     }
   ]
 }

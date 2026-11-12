@@ -70,14 +70,177 @@ body {
 /* ==========================================================================
    3. TELA DE LOGIN E CADASTRO
    ========================================================================== */
+
+/* Fundo da página com brilho azul nos cantos (sobrescreve o bg-black do Bootstrap) */
+body.bg-black {
+  background-color: #12121e !important;
+  background-image:
+    radial-gradient(circle at 12% 12%, rgba(0, 94, 196, 0.35), transparent 40%),
+    radial-gradient(circle at 92% 98%, rgba(0, 94, 196, 0.22), transparent 38%);
+  background-attachment: fixed;
+}
+
+/* Cartão */
 .login-card {
-  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.8rem;
+  max-width: 500px;
+  height: 600px;
+  padding: 2rem 2.75rem !important;
   background-color: #1a1a2e;
   color: #ddd;
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
-  border-radius: 0.75rem;
-  padding: 2rem;
+  border-radius: 0.75rem; 
 }
+
+/* Título e textos */
+.login-card h1 {
+  color: #fff;
+  font-size: 1.75rem;
+  margin-bottom: 0.6rem !important;
+}
+
+.login-card p.small {
+  text-align: center;
+  color: #aaa !important;
+  margin-bottom: 1.5rem;
+}
+
+.login-card .form-label {
+  margin-bottom: 0.375rem;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.login-card .form-text {
+  margin-top: 0.5rem;
+  color: #aaa !important;
+  font-size: 0.75rem;
+}
+
+/* Campos de texto */
+.login-card .form-control {
+  height: 44px;
+  padding: 0 0.875rem;
+  background-color: #2d3238;
+  border: 1px solid #464d56;
+  border-radius: 0.5rem;
+  color: #fff;
+  font-size: 1rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.login-card .form-control::placeholder {
+  color: #aaa;
+}
+
+.login-card .form-control:focus {
+  background-color: #2d3238;
+  border-color: #005ec4;
+  color: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 94, 196, 0.35);
+}
+
+/* Evita o fundo branco/amarelo do preenchimento automático do navegador */
+.login-card .form-control:-webkit-autofill {
+  -webkit-text-fill-color: #fff;
+  -webkit-box-shadow: 0 0 0 1000px #2d3238 inset;
+  caret-color: #fff;
+}
+
+/* Botão principal */
+.login-card .btn-primary {
+  height: 44px;
+  background-color: #005ec4;
+  border-color: #005ec4;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: background-color 0.15s ease;
+}
+
+.login-card .btn-primary:hover,
+.login-card .btn-primary:focus {  
+  background-color: #004ea3;
+  border-color: #004ea3;
+}
+
+.login-card .btn-primary:disabled {
+  opacity: 0.6;
+}
+
+/* Link "Já tenho conta" */
+.login-card a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.login-card a:hover {
+  text-decoration: underline;
+}
+
+/* Mensagem de erro */
+#msg-erro {
+  margin-bottom: 1rem;
+  color: #ffc107 !important;
+  font-size: 0.875rem;
+}
+
+/* --- Extra: botão de olho no campo de senha --- */
+.senha-wrapper {
+  position: relative;
+}
+
+.senha-wrapper .form-control {
+  padding-right: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.btn-olho {
+  position: absolute;
+  top: 2px;         
+  right: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 0;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.btn-olho:hover {
+  color: #fff;
+}
+
+.btn-olho:focus-visible {
+  outline: 2px solid #005ec4;
+  border-radius: 0.5rem;
+}
+
+/* --- Extra: barra de força da senha (data-nivel = 0, 1, 2 ou 3) --- */
+.forca {
+  display: flex;
+  gap: 6px;
+  margin-top: 0.6rem;
+}
+
+.forca span {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: #464d56;
+  transition: background-color 0.2s ease;
+}
+
+.forca[data-nivel="1"] span:nth-child(-n+1) { background: #dc3545; }
+.forca[data-nivel="2"] span:nth-child(-n+2) { background: #ffc107; }
+.forca[data-nivel="3"] span:nth-child(-n+3) { background: #28a745; }
 
 /* ==========================================================================
    4. ESTRUTURA DO CHAT (SIDEBAR, CONVERSA E BALÕES)
