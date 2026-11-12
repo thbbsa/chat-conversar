@@ -87,8 +87,8 @@ body.bg-black {
   justify-content: center;
   gap: 0.8rem;
   max-width: 500px;
-  height: 600px;
-  padding: 2rem 2.75rem !important;
+  min-height: min(600px, 80dvh);
+  padding: 2rem clamp(1.25rem, 5vw, 2.75rem) !important;
   background-color: #1a1a2e;
   color: #ddd;
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
@@ -326,6 +326,7 @@ body.bg-black {
    5. PÁGINA DE RELATÓRIO DO LOCALSTORAGE
    ========================================================================== */
 .relatorio-container {
+  width: calc(100% - 2rem);
   max-width: 900px;
   margin: 2rem auto;
   padding: 1.5rem;
@@ -346,7 +347,7 @@ body.bg-black {
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
   gap: 1rem;
   margin-bottom: 2rem;
 }
@@ -374,7 +375,7 @@ body.bg-black {
 .tabela-wrapper {
   background: #2d3238;
   border-radius: 0.5rem;
-  overflow: hidden;
+  overflow-x: auto;
   margin-top: 1rem;
 }
 
@@ -425,4 +426,159 @@ td:last-child {
 
 .btn-danger:hover {
   background: #bd2130;
+}
+
+/* Layout fluido e rolagem independente das conversas. */
+.auth-layout {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-block: 1.5rem;
+}
+
+.navbar > .container-fluid {
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.navbar > .container-fluid > .d-flex {
+  flex-wrap: wrap;
+}
+
+.navbar .btn {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+}
+
+.chat-page > .navbar {
+  flex-shrink: 0;
+}
+
+.chat-layout {
+  flex: 1;
+  min-height: 0;
+}
+
+.sidebar,
+.conversa,
+#lista-chats,
+#painel-mensagens {
+  min-height: 0;
+}
+
+.conversa > header,
+#form-mensagem {
+  flex-shrink: 0;
+}
+
+#titulo-chat,
+#nome-usuario-logado,
+.stat-card,
+.relatorio-header {
+  overflow-wrap: anywhere;
+}
+
+#input-mensagem {
+  min-width: 0;
+  font-size: 1rem;
+}
+
+#btn-enviar {
+  flex-shrink: 0;
+  min-height: 44px;
+}
+
+.tabela-wrapper table {
+  min-width: 480px;
+  table-layout: fixed;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 767.98px) {
+  .chat-layout {
+    flex-direction: column;
+  }
+
+  .chat-layout > .sidebar {
+    width: 100%;
+    padding: 0.75rem 1rem !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid #6c757d;
+  }
+
+  .sidebar > .d-flex {
+    display: none !important;
+  }
+
+  .sidebar > .small {
+    margin-bottom: 0.5rem !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #lista-chats {
+    display: flex;
+    gap: 0.5rem;
+    padding-bottom: 0.25rem;
+  }
+
+  #lista-chats > li {
+    flex: 0 0 190px;
+  }
+
+  .chat-item {
+    height: 100%;
+    margin-bottom: 0;
+  }
+
+  .conversa {
+    padding: 0.75rem !important;
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom)) !important;
+  }
+
+  .conversa > header {
+    margin-bottom: 0.5rem !important;
+  }
+
+  #titulo-chat {
+    font-size: 1.15rem;
+  }
+
+  .balao {
+    max-width: 92%;
+  }
+
+  #btn-enviar {
+    padding-inline: 1rem !important;
+  }
+
+  .relatorio-container {
+    margin-block: 1rem;
+    padding: 1rem;
+  }
+
+  .acoes-container .btn-danger {
+    width: 100%;
+  }
+}
+
+@media (max-height: 500px) and (max-width: 767.98px) {
+  .sidebar > .small,
+  .chat-label small {
+    display: none;
+  }
+
+  .chat-layout > .sidebar {
+    padding-block: 0.25rem !important;
+  }
 }
