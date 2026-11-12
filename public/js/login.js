@@ -13,14 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const msgSucesso = document.getElementById('msg-sucesso');
 
   // Exibe mensagem caso venha do cadastro com sucesso
-  const params = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(window.location.href.split('?')[1] || '');
   if (params.get('cadastro') === 'ok') {
     msgSucesso.style.display = 'block';
   }
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    msgErro.style.display = 'none';
+    msgErro.style.display = 'none'; 
     msgErro.textContent = '';
 
     const erro = new Contas().entrar(inputNome.value, inputSenha.value);
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Sucesso no login, vai para o chat
+    // Sucesso no login, redireciona para o chat
     window.location.assign('/chat.html');
   });
 });
