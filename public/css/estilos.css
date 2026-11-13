@@ -582,3 +582,33 @@ td:last-child {
     padding-block: 0.25rem !important;
   }
 }
+/* Logo principal da barra superior */
+.marca-logo {
+  display: block;
+  width: 185px;
+  height: auto;
+  max-height: 48px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+/* Ícone usado nas telas de login e cadastro */
+.marca-logo-login {
+  display: block;
+  width: 92px;
+  height: 92px;
+  object-fit: contain;
+  margin: 0 auto 0.75rem;
+}
+
+/* Ajuste para telas pequenas */
+@media (max-width: 640px) {
+  .marca-logo {
+    width: 145px;
+  }
+
+  .navbar .btn {
+    padding-left: 0.45rem;
+    padding-right: 0.45rem;
+  }
+}
