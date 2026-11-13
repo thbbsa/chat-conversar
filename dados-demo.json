@@ -1,6 +1,6 @@
 {
-  "proximoIdUsuario": 8,
-  "proximoIdMensagem": 7,
+  "proximoIdUsuario": 9,
+  "proximoIdMensagem": 18,
   "usuarios": [
     {
       "id": 1,
@@ -29,6 +29,10 @@
     {
       "id": 7,
       "username": "thbbsa"
+    },
+    {
+      "id": 8,
+      "username": "th.bbsa"
     }
   ],
   "mensagens": [
@@ -85,6 +89,105 @@
       "conteudo": "bem ????",
       "timestamp": "18:28",
       "data": "2026-11-12T21:28:04.084Z"
+    },
+    {
+      "id": 7,
+      "chatId": "global",
+      "remetenteId": 7,
+      "destinatarioId": null,
+      "conteudo": "opa",
+      "timestamp": "18:30",
+      "data": "2026-11-12T21:30:49.950Z"
+    },
+    {
+      "id": 8,
+      "chatId": "6-8",
+      "remetenteId": 8,
+      "destinatarioId": 6,
+      "conteudo": "oii",
+      "timestamp": "21:29",
+      "data": "2026-11-13T00:29:46.030Z"
+    },
+    {
+      "id": 9,
+      "chatId": "7-8",
+      "remetenteId": 8,
+      "destinatarioId": 7,
+      "conteudo": "opa",
+      "timestamp": "21:45",
+      "data": "2026-11-13T00:45:07.706Z"
+    },
+    {
+      "id": 10,
+      "chatId": "7-8",
+      "remetenteId": 7,
+      "destinatarioId": 8,
+      "conteudo": "eai",
+      "timestamp": "21:45",
+      "data": "2026-11-13T00:45:11.539Z"
+    },
+    {
+      "id": 11,
+      "chatId": "7-8",
+      "remetenteId": 7,
+      "destinatarioId": 8,
+      "conteudo": "tudo bem ?",
+      "timestamp": "21:45",
+      "data": "2026-11-13T00:45:14.156Z"
+    },
+    {
+      "id": 12,
+      "chatId": "7-8",
+      "remetenteId": 8,
+      "destinatarioId": 7,
+      "conteudo": "to bem",
+      "timestamp": "21:45",
+      "data": "2026-11-13T00:45:22.528Z"
+    },
+    {
+      "id": 13,
+      "chatId": "7-8",
+      "remetenteId": 8,
+      "destinatarioId": 7,
+      "conteudo": "e vc ?",
+      "timestamp": "21:45",
+      "data": "2026-11-13T00:45:23.624Z"
+    },
+    {
+      "id": 14,
+      "chatId": "7-8",
+      "remetenteId": 7,
+      "destinatarioId": 8,
+      "conteudo": "to bem",
+      "timestamp": "21:45",
+      "data": "2026-11-13T00:45:26.825Z"
+    },
+    {
+      "id": 15,
+      "chatId": "7-8",
+      "remetenteId": 8,
+      "destinatarioId": 7,
+      "conteudo": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "timestamp": "21:45",
+      "data": "2026-11-13T00:45:34.797Z"
+    },
+    {
+      "id": 16,
+      "chatId": "7-8",
+      "remetenteId": 7,
+      "destinatarioId": 8,
+      "conteudo": "wwwwwwwwwwwwwwwwwwwwwwwww",
+      "timestamp": "21:45",
+      "data": "2026-11-13T00:45:38.772Z"
+    },
+    {
+      "id": 17,
+      "chatId": "global",
+      "remetenteId": 7,
+      "destinatarioId": null,
+      "conteudo": "eai",
+      "timestamp": "21:46",
+      "data": "2026-11-13T00:46:05.813Z"
     }
   ]
 }

@@ -1,86 +1,133 @@
-/* ==========================================================================
-   1. ESTILOS GERAIS E BASE (DARK MODE)
-   ========================================================================== */
+:root {
+  --bg: #0f0f1b;
+  --surface: #1a1a2e;
+  --surface-2: #23233b;
+  --surface-3: #2d3238;
+  --line: #2d3238;
+  --line-strong: #464d56;
+  --text: #e6e6ee;
+  --text-strong: #ffffff;
+  --text-muted: #9a9fb0;
+  --accent: #005ec4;
+  --accent-hover: #0a6fe0;
+  --accent-soft: rgba(0, 94, 196, 0.18);
+  --accent-ring: rgba(61, 142, 240, 0.55);
+  --danger: #dc3545;
+  --danger-hover: #bd2130;
+  --warning: #ffc107;
+  --success: #28a745;
+  --radius-sm: 0.4rem;
+  --radius-md: 0.6rem;
+  --radius-lg: 0.9rem;
+  --bubble-radius: 1.1rem;
+  --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  background-color: #12121e;
-  color: #ddd;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  min-height: 100vh;
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
-/* Scrollbar personalizada para o tema escuro */
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-ring);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--text-strong);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-3) transparent;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #12121e;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2d3238;
+  background: var(--surface-3);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #464d56;
+  background: var(--line-strong);
 }
 
-/* ==========================================================================
-   2. BARRA DE NAVEGAÇÃO E MENU SUPERIOR
-   ========================================================================== */
 .navbar-top,
 .navbar {
-  background-color: #1a1a2e !important;
-  border-bottom: 1px solid #2d3238 !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  background-color: var(--surface) !important;
+  border-bottom: 1px solid var(--line) !important;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02), 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 
 .nav-menu {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.5rem;
 }
 
 .nav-menu a,
 .menu-link {
-  color: #ddd;
+  color: var(--text);
   text-decoration: none;
-  padding: 0.4rem 0.8rem;
-  border-radius: 0.4rem;
-  font-size: 0.95rem;
-  background-color: #2d3238;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.92rem;
+  font-weight: 500;
+  background-color: transparent;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .nav-menu a:hover,
-.nav-menu a.ativo,
 .menu-link:hover {
-  background-color: #005ec4;
-  color: #fff;
+  background-color: var(--surface-3);
+  color: var(--text-strong);
 }
 
-/* ==========================================================================
-   3. TELA DE LOGIN E CADASTRO
-   ========================================================================== */
+.nav-menu a.ativo {
+  background-color: var(--accent);
+  color: var(--text-strong);
+}
 
-/* Fundo da página com brilho azul nos cantos (sobrescreve o bg-black do Bootstrap) */
 body.bg-black {
-  background-color: #12121e !important;
+  background-color: var(--bg) !important;
   background-image:
-    radial-gradient(circle at 12% 12%, rgba(0, 94, 196, 0.35), transparent 40%),
-    radial-gradient(circle at 92% 98%, rgba(0, 94, 196, 0.22), transparent 38%);
+    radial-gradient(circle at 12% 12%, rgba(0, 94, 196, 0.32), transparent 40%),
+    radial-gradient(circle at 92% 98%, rgba(0, 94, 196, 0.2), transparent 38%);
   background-attachment: fixed;
 }
 
-/* Cartão */
 .login-card {
   display: flex;
   flex-direction: column;
@@ -89,91 +136,97 @@ body.bg-black {
   max-width: 500px;
   min-height: min(600px, 80dvh);
   padding: 2rem clamp(1.25rem, 5vw, 2.75rem) !important;
-  background-color: #1a1a2e;
-  color: #ddd;
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
-  border-radius: 0.75rem; 
+  background-color: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+  border-radius: var(--radius-lg);
 }
 
-/* Título e textos */
 .login-card h1 {
-  color: #fff;
+  color: var(--text-strong);
   font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   margin-bottom: 0.6rem !important;
 }
 
 .login-card p.small {
   text-align: center;
-  color: #aaa !important;
+  color: var(--text-muted) !important;
   margin-bottom: 1.5rem;
 }
 
 .login-card .form-label {
   margin-bottom: 0.375rem;
-  color: #fff;
+  color: var(--text-strong);
   font-size: 0.875rem;
   font-weight: 500;
 }
 
 .login-card .form-text {
   margin-top: 0.5rem;
-  color: #aaa !important;
-  font-size: 0.75rem;
+  color: var(--text-muted) !important;
+  font-size: 0.78rem;
 }
 
-/* Campos de texto */
 .login-card .form-control {
-  height: 44px;
-  padding: 0 0.875rem;
-  background-color: #2d3238;
-  border: 1px solid #464d56;
-  border-radius: 0.5rem;
-  color: #fff;
+  height: 46px;
+  padding: 0 0.9rem;
+  background-color: var(--surface-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  color: var(--text-strong);
   font-size: 1rem;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
 }
 
 .login-card .form-control::placeholder {
-  color: #aaa;
+  color: var(--text-muted);
+}
+
+.login-card .form-control:hover {
+  border-color: #5a626d;
 }
 
 .login-card .form-control:focus {
-  background-color: #2d3238;
-  border-color: #005ec4;
-  color: #fff;
-  box-shadow: 0 0 0 3px rgba(0, 94, 196, 0.35);
+  background-color: var(--surface-3);
+  border-color: var(--accent-hover);
+  color: var(--text-strong);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
-/* Evita o fundo branco/amarelo do preenchimento automático do navegador */
 .login-card .form-control:-webkit-autofill {
   -webkit-text-fill-color: #fff;
-  -webkit-box-shadow: 0 0 0 1000px #2d3238 inset;
+  -webkit-box-shadow: 0 0 0 1000px var(--surface-3) inset;
   caret-color: #fff;
 }
 
-/* Botão principal */
 .login-card .btn-primary {
-  height: 44px;
-  background-color: #005ec4;
-  border-color: #005ec4;
-  border-radius: 0.5rem;
+  height: 46px;
+  background-color: var(--accent);
+  border-color: var(--accent);
+  border-radius: var(--radius-md);
   font-weight: 600;
-  transition: background-color 0.15s ease;
+  transition: background-color 0.15s ease, transform 0.1s ease;
 }
 
 .login-card .btn-primary:hover,
-.login-card .btn-primary:focus {  
-  background-color: #004ea3;
-  border-color: #004ea3;
+.login-card .btn-primary:focus {
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.login-card .btn-primary:active {
+  transform: translateY(1px);
 }
 
 .login-card .btn-primary:disabled {
   opacity: 0.6;
 }
 
-/* Link "Já tenho conta" */
 .login-card a {
-  color: #fff;
+  color: var(--text-strong);
   text-decoration: none;
   font-size: 0.875rem;
 }
@@ -182,14 +235,12 @@ body.bg-black {
   text-decoration: underline;
 }
 
-/* Mensagem de erro */
 #msg-erro {
   margin-bottom: 1rem;
-  color: #ffc107 !important;
+  color: var(--warning) !important;
   font-size: 0.875rem;
 }
 
-/* --- Extra: botão de olho no campo de senha --- */
 .senha-wrapper {
   position: relative;
 }
@@ -201,7 +252,7 @@ body.bg-black {
 
 .btn-olho {
   position: absolute;
-  top: 2px;         
+  top: 3px;
   right: 4px;
   display: flex;
   align-items: center;
@@ -210,20 +261,17 @@ body.bg-black {
   height: 40px;
   background: transparent;
   border: 0;
-  color: #aaa;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
   cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease;
 }
 
 .btn-olho:hover {
-  color: #fff;
+  color: var(--text-strong);
+  background-color: rgba(255, 255, 255, 0.06);
 }
 
-.btn-olho:focus-visible {
-  outline: 2px solid #005ec4;
-  border-radius: 0.5rem;
-}
-
-/* --- Extra: barra de força da senha (data-nivel = 0, 1, 2 ou 3) --- */
 .forca {
   display: flex;
   gap: 6px;
@@ -234,48 +282,67 @@ body.bg-black {
   flex: 1;
   height: 4px;
   border-radius: 2px;
-  background: #464d56;
-  transition: background-color 0.2s ease;
+  background: var(--line-strong);
+  transition: background-color 0.25s ease;
 }
 
-.forca[data-nivel="1"] span:nth-child(-n+1) { background: #dc3545; }
-.forca[data-nivel="2"] span:nth-child(-n+2) { background: #ffc107; }
-.forca[data-nivel="3"] span:nth-child(-n+3) { background: #28a745; }
+.forca[data-nivel="1"] span:nth-child(-n+1) { background: var(--danger); }
+.forca[data-nivel="2"] span:nth-child(-n+2) { background: var(--warning); }
+.forca[data-nivel="3"] span:nth-child(-n+3) { background: var(--success); }
 
-/* ==========================================================================
-   4. ESTRUTURA DO CHAT (SIDEBAR, CONVERSA E BALÕES)
-   ========================================================================== */
 .sidebar {
   width: clamp(14rem, 28%, 22rem);
   flex-shrink: 0;
-  background-color: #1a1a2e;
+  background-color: var(--surface);
 }
 
 .conversa {
   min-width: 0;
-  background-color: #12121e;
+  background-color: var(--bg);
+}
+
+.conversa > header {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--line);
+}
+
+#titulo-chat {
+  color: var(--text-strong);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+#lista-chats {
+  list-style: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .chat-item {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.75rem;
   width: 100%;
-  margin-bottom: 0.6rem;
-  padding: 0.6rem 0.75rem;
+  margin-bottom: 0.4rem;
+  padding: 0.65rem 0.8rem;
   border: 0;
-  border-radius: 0.5rem;
-  background: #2d3238;
-  color: #fff;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-strong);
   text-align: start;
   overflow-wrap: anywhere;
   cursor: pointer;
   transition: background-color 0.15s ease;
 }
 
-.chat-item.ativo,
 .chat-item:hover {
-  background: #464d56;
+  background: var(--surface-2);
+}
+
+.chat-item.ativo {
+  background: var(--surface-3);
+  box-shadow: inset 3px 0 0 var(--accent-hover);
 }
 
 .chat-label {
@@ -285,6 +352,7 @@ body.bg-black {
 
 .chat-label strong {
   display: block;
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -292,56 +360,162 @@ body.bg-black {
 
 .chat-label small {
   display: block;
-  color: #aaa;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .avatar {
-  flex: 0 0 2rem;
-  height: 2rem;
-  line-height: 2rem;
+  flex: 0 0 2.25rem;
+  height: 2.25rem;
+  line-height: 2.25rem;
   border-radius: 50%;
   text-align: center;
-  background: #eee;
-  color: #202428;
-  font-weight: bold;
+  background: var(--accent);
+  color: var(--text-strong);
+  font-weight: 700;
+  font-size: 0.95rem;
+  user-select: none;
+}
+
+#painel-mensagens {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  padding: 1rem 0.25rem;
 }
 
 .balao {
-  max-width: 80%;
-  padding: 0.65rem 0.9rem;
-  border-radius: 0.75rem;
-  background: #2a2a40;
+  position: relative;
+  max-width: min(80%, 34rem);
+  padding: 0.6rem 0.95rem;
+  border-radius: var(--bubble-radius);
+  border-bottom-left-radius: 0.3rem;
+  background: var(--surface-2);
+  border: 1px solid rgba(255, 255, 255, 0.04);
   overflow-wrap: anywhere;
   white-space: pre-wrap;
-  color: #fff;
-  margin-bottom: 0.5rem;
+  color: var(--text);
+  line-height: 1.45;
+  margin-bottom: 0;
+  animation: balao-entrada 0.22s var(--ease);
 }
 
 .balao.minha {
-  background: #005ec4;
+  align-self: flex-end;
   margin-left: auto;
+  background: var(--accent);
+  border-color: transparent;
+  border-bottom-left-radius: var(--bubble-radius);
+  border-bottom-right-radius: 0.3rem;
+  color: var(--text-strong);
 }
 
-/* ==========================================================================
-   5. PÁGINA DE RELATÓRIO DO LOCALSTORAGE
-   ========================================================================== */
+.balao small,
+.balao time {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.balao.minha small,
+.balao.minha time {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+@keyframes balao-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#form-mensagem {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+#form-mensagem #input-mensagem {
+  flex: 1;
+  height: 46px;
+  padding: 0 1.1rem;
+  background-color: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text-strong);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+#form-mensagem #input-mensagem::placeholder {
+  color: var(--text-muted);
+}
+
+#form-mensagem #input-mensagem:focus {
+  background-color: var(--surface-2);
+  border-color: var(--accent-hover);
+  color: var(--text-strong);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  outline: none;
+}
+
+#form-mensagem #btn-enviar {
+  height: 46px;
+  padding: 0 1.4rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--text-strong);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+#form-mensagem #btn-enviar:hover {
+  background: var(--accent-hover);
+}
+
+#form-mensagem #btn-enviar:active {
+  transform: scale(0.97);
+}
+
+#form-mensagem #btn-enviar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .relatorio-container {
   width: calc(100% - 2rem);
   max-width: 900px;
   margin: 2rem auto;
   padding: 1.5rem;
-  background-color: #1a1a2e;
-  border-radius: 0.75rem;
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
 }
 
 .relatorio-header h2 {
   margin-top: 0;
-  color: #fff;
+  color: var(--text-strong);
+  letter-spacing: -0.01em;
 }
 
 .relatorio-header p {
-  color: #aaa;
+  color: var(--text-muted);
   margin-bottom: 1.5rem;
 }
 
@@ -353,28 +527,32 @@ body.bg-black {
 }
 
 .stat-card {
-  background: #2d3238;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
   padding: 1rem;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-md);
 }
 
 .stat-card small {
   display: block;
-  color: #aaa;
+  color: var(--text-muted);
   margin-bottom: 0.25rem;
 }
 
 .stat-card strong {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
-.texto-destaque { color: #005ec4; }
-.texto-sucesso { color: #28a745; }
-.texto-alerta { color: #ffc107; }
+.texto-destaque { color: #58a6ff; }
+.texto-sucesso { color: var(--success); }
+.texto-alerta { color: var(--warning); }
 
 .tabela-wrapper {
-  background: #2d3238;
-  border-radius: 0.5rem;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
   overflow-x: auto;
   margin-top: 1rem;
 }
@@ -385,26 +563,31 @@ table {
 }
 
 th {
-  background: #464d56;
-  color: #fff;
+  background: var(--surface-3);
+  color: var(--text-strong);
   text-align: left;
+  font-weight: 600;
   padding: 0.75rem 1rem;
 }
 
 td {
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #3d434a;
+  border-bottom: 1px solid var(--line);
   font-size: 0.9rem;
+}
+
+tr:last-child td {
+  border-bottom: 0;
 }
 
 td:first-child {
   color: #58a6ff;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 td:last-child {
-  font-family: monospace;
-  color: #ccc;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: #c8ccd6;
   word-break: break-all;
 }
 
@@ -414,21 +597,24 @@ td:last-child {
 }
 
 .btn-danger {
-  background: #dc3545;
-  color: #fff;
+  background: var(--danger);
+  color: var(--text-strong);
   border: 0;
   padding: 0.6rem 1.2rem;
-  border-radius: 0.5rem;
-  font-weight: bold;
+  border-radius: var(--radius-md);
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: background-color 0.15s ease, transform 0.1s ease;
 }
 
 .btn-danger:hover {
-  background: #bd2130;
+  background: var(--danger-hover);
 }
 
-/* Layout fluido e rolagem independente das conversas. */
+.btn-danger:active {
+  transform: translateY(1px);
+}
+
 .auth-layout {
   min-height: 100vh;
   min-height: 100dvh;
@@ -503,6 +689,23 @@ td:last-child {
   overflow-wrap: anywhere;
 }
 
+.marca-logo {
+  display: block;
+  width: 185px;
+  height: auto;
+  max-height: 48px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.marca-logo-login {
+  display: block;
+  width: 92px;
+  height: 92px;
+  object-fit: contain;
+  margin: 0 auto 0.75rem;
+}
+
 @media (max-width: 767.98px) {
   .chat-layout {
     flex-direction: column;
@@ -512,7 +715,7 @@ td:last-child {
     width: 100%;
     padding: 0.75rem 1rem !important;
     border-right: 0 !important;
-    border-bottom: 1px solid #6c757d;
+    border-bottom: 1px solid var(--line);
   }
 
   .sidebar > .d-flex {
@@ -530,6 +733,8 @@ td:last-child {
     display: flex;
     gap: 0.5rem;
     padding-bottom: 0.25rem;
+    overflow-x: auto;
+    overflow-y: hidden;
   }
 
   #lista-chats > li {
@@ -539,6 +744,11 @@ td:last-child {
   .chat-item {
     height: 100%;
     margin-bottom: 0;
+    background: var(--surface-2);
+  }
+
+  .chat-item.ativo {
+    box-shadow: inset 0 -3px 0 var(--accent-hover);
   }
 
   .conversa {
@@ -547,7 +757,7 @@ td:last-child {
   }
 
   .conversa > header {
-    margin-bottom: 0.5rem !important;
+    margin-bottom: 0.25rem !important;
   }
 
   #titulo-chat {
@@ -555,11 +765,11 @@ td:last-child {
   }
 
   .balao {
-    max-width: 92%;
+    max-width: 90%;
   }
 
-  #btn-enviar {
-    padding-inline: 1rem !important;
+  #form-mensagem #btn-enviar {
+    padding-inline: 1.1rem;
   }
 
   .relatorio-container {
@@ -569,6 +779,15 @@ td:last-child {
 
   .acoes-container .btn-danger {
     width: 100%;
+  }
+
+  .marca-logo {
+    width: 145px;
+  }
+
+  .navbar .btn {
+    padding-left: 0.45rem;
+    padding-right: 0.45rem;
   }
 }
 
@@ -582,33 +801,14 @@ td:last-child {
     padding-block: 0.25rem !important;
   }
 }
-/* Logo principal da barra superior */
-.marca-logo {
-  display: block;
-  width: 185px;
-  height: auto;
-  max-height: 48px;
-  object-fit: contain;
-  object-position: left center;
-}
 
-/* Ícone usado nas telas de login e cadastro */
-.marca-logo-login {
-  display: block;
-  width: 92px;
-  height: 92px;
-  object-fit: contain;
-  margin: 0 auto 0.75rem;
-}
-
-/* Ajuste para telas pequenas */
-@media (max-width: 640px) {
-  .marca-logo {
-    width: 145px;
-  }
-
-  .navbar .btn {
-    padding-left: 0.45rem;
-    padding-right: 0.45rem;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
