@@ -19,7 +19,7 @@ function carregarDados() {
     texto = fs.readFileSync(ARQUIVO, 'utf8');
   } catch (erro) {
     if (erro.code === 'ENOENT') {
-      console.log('dados.json não existe, começando vazio.');
+      console.log('dados-demo.json não existe, começando vazio.');
       return structuredClone(DADOS_INICIAIS);
     }
     throw erro;
@@ -28,7 +28,7 @@ function carregarDados() {
   try {
     return { ...structuredClone(DADOS_INICIAIS), ...JSON.parse(texto) };
   } catch {
-    console.error('dados.json está corrompido. Corrija ou apague o arquivo.');
+    console.error('dados-demo.json está corrompido. Corrija ou apague o arquivo.');
     process.exit(1);
   }
 }
