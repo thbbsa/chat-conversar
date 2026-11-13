@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   // 1. Verificação de sessão
   const username = new Contas().usuarioLogado();
   if (!username) {
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Estado da aplicação
   let meuId = null;
-  let chatAtual = 'global';
+  let chatAtual = null;
   let usuarios = [];
   let notificacoes = {};
   let conversas = carregarConversas();
@@ -61,50 +61,33 @@ document.addEventListener('DOMContentLoaded', () => {
   function atualizarEstadoConexao(estaConectado) {
     conectado = estaConectado;
     alertaConexao.style.display = estaConectado ? 'none' : 'block';
-    btnEnviar.disabled = !estaConectado;
+    btnEnviar.disabled = !estaConectado || !chatAtual;
+    inputMensagem.disabled = !estaConectado || !chatAtual;
   }
 
   // 2. Renderização da barra lateral de conversas
   function renderSidebar() {
+    renderPessoas();
     listaChats.innerHTML = '';
 
-    // Item: Chat Global
-    const liGlobal = document.createElement('li');
-    const btnGlobal = document.createElement('button');
-    btnGlobal.type = 'button';
-    btnGlobal.className = `chat-item ${chatAtual === 'global' ? 'ativo' : ''}`;
-    btnGlobal.addEventListener('click', () => selecionarChat('global'));
-
-    const avatarGlobal = document.createElement('span');
-    avatarGlobal.className = 'avatar';
-    avatarGlobal.textContent = 'G';
-
-    const labelGlobal = document.createElement('span');
-    labelGlobal.className = 'chat-label';
-    const strongGlobal = document.createElement('strong');
-    strongGlobal.textContent = 'Chat Global';
-    const smallGlobal = document.createElement('small');
-    smallGlobal.className = 'text-secondary';
-    smallGlobal.textContent = 'Converse com todos';
-    labelGlobal.appendChild(strongGlobal);
-    labelGlobal.appendChild(smallGlobal);
-
-    btnGlobal.appendChild(avatarGlobal);
-    btnGlobal.appendChild(labelGlobal);
-
-    const totalGlobal = notificacoes['global'] || 0;
-    if (totalGlobal > 0) {
-      const badge = document.createElement('span');
-      badge.className = 'badge bg-danger';
-      badge.textContent = totalGlobal;
-      btnGlobal.appendChild(badge);
+    const contatos = new Contas().contatos();
+    if (chatAtual && !usuarios.some(u => contatos.includes(u.id) && idPrivado(u.id) === chatAtual)) {
+      delete notificacoes[chatAtual];
+      chatAtual = null;
+      tituloChat.textContent = 'Selecione um contato';
+      inputMensagem.value = '';
+      atualizarEstadoConexao(conectado);
+      renderMensagens();
+    }
+    if (!contatos.length) {
+      const vazio = document.createElement('li');
+      vazio.className = 'small text-secondary';
+      vazio.textContent = 'Nenhum contato. Use Adicionar pessoas para começar.';
+      listaChats.appendChild(vazio);
     }
 
-    liGlobal.appendChild(btnGlobal);
-    listaChats.appendChild(liGlobal);
-
     // Lista de usuários ordenada (online primeiro, depois por nome)
-    const usuariosOrdenados = [...usuarios].sort((a, b) => {
+    const usuariosOrdenados = usuarios.filter(u => contatos.includes(u.id)).sort((a, b) => {
       if (b.online !== a.online) return Number(b.online) - Number(a.online);
       return a.username.localeCompare(b.username);
     });
@@ -145,13 +128,36 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.appendChild(badge);
       }
 
+      const remover = document.createElement('button');
+      remover.type = 'button';
+      remover.className = 'btn-remover-contato';
+      const iconeLixeira = document.createElement('span');
+      iconeLixeira.className = 'icone-lixeira';
+      iconeLixeira.textContent = 'delete';
+      iconeLixeira.setAttribute('aria-hidden', 'true');
+      remover.appendChild(iconeLixeira);
+      remover.title = `Remover ${user.username} dos contatos`;
+      remover.setAttribute('aria-label', `Remover ${user.username} dos contatos`);
+      remover.addEventListener('click', () => {
+        const erro = new Contas().removerContato(user.id);
+        const mensagemErro = document.getElementById('msg-erro');
+        mensagemErro.textContent = erro;
+        mensagemErro.style.display = erro ? 'block' : 'none';
+        if (erro) return;
+        delete notificacoes[chatId];
+        renderSidebar();
+        document.getElementById('btn-adicionar-pessoas').focus();
+      });
+      li.className = 'contato-item';
       li.appendChild(btn);
+      li.appendChild(remover);
       listaChats.appendChild(li);
     });
   }
 
   // 3. Seleção de conversa
   function selecionarChat(chatId) {
+    if (!usuarios.some(u => idPrivado(u.id) === chatId && new Contas().contatos().includes(u.id))) return;
     chatAtual = chatId;
     notificacoes[chatId] = 0;
 
@@ -164,6 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderSidebar();
     renderMensagens();
+    atualizarEstadoConexao(conectado);
     inputMensagem.focus();
   }
 
@@ -175,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (msgs.length === 0) {
       const vazio = document.createElement('div');
       vazio.className = 'text-center text-secondary py-5 small';
-      vazio.textContent = 'Nenhuma mensagem ainda. Inicie a conversa!';
+      vazio.textContent = chatAtual ? 'Nenhuma mensagem ainda. Inicie a conversa!' : 'Adicione uma pessoa ou selecione um contato para conversar.';
       painelMensagens.appendChild(vazio);
       return;
     }
@@ -216,14 +223,14 @@ document.addEventListener('DOMContentLoaded', () => {
     socket = new WebSocket(`${protocolo}//${window.location.host}/ws`);
 
     socket.onopen = () => {
-      atualizarEstadoConexao(true);
+      atualizarEstadoConexao(false);
       socket.send(JSON.stringify({ type: 'register', username }));
     };
 
     socket.onclose = (evento) => {
       atualizarEstadoConexao(false);
       if (evento.code === 1008) {
-        Contas.sair();
+        new Contas().sair();
         window.location.replace('/login.html');
       }
     };
@@ -243,6 +250,13 @@ document.addEventListener('DOMContentLoaded', () => {
       switch (dados.type) {
         case 'online_list':
           meuId = dados.id;
+          try {
+            new Contas().sincronizarId(meuId);
+          } catch {
+            document.getElementById('msg-erro').textContent = 'Não foi possível atualizar a conta neste navegador.';
+            document.getElementById('msg-erro').style.display = 'block';
+          }
+          atualizarEstadoConexao(true);
           usuarios = dados.users || [];
           conversas = carregarConversas();
           renderSidebar();
@@ -263,13 +277,14 @@ document.addEventListener('DOMContentLoaded', () => {
           break;
         }
 
+        case 'user_available':
         case 'user_online':
           if (dados.username !== username) {
             const index = usuarios.findIndex(u => u.id === dados.id);
             if (index >= 0) {
-              usuarios[index].online = true;
+              usuarios[index].online = dados.type === 'user_online';
             } else {
-              usuarios.push({ id: dados.id, username: dados.username, online: true });
+              usuarios.push({ id: dados.id, username: dados.username, online: dados.type === 'user_online' });
             }
             renderSidebar();
           }
@@ -287,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
         default: {
           // Nova mensagem de chat recebida
           const chatId = dados.chatId;
-          if (!chatId) return;
+          if (!chatId || chatId === 'global') return;
 
           if (!conversas[chatId]) conversas[chatId] = [];
 
@@ -299,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           if (chatId === chatAtual) {
             renderMensagens();
-          } else if (dados.remetenteId !== meuId) {
+          } else if (dados.remetenteId !== meuId && new Contas().contatos().includes(dados.remetenteId)) {
             notificacoes[chatId] = (notificacoes[chatId] || 0) + 1;
             renderSidebar();
             tocarAudioNotificacao();
@@ -314,12 +329,12 @@ document.addEventListener('DOMContentLoaded', () => {
   formMensagem.addEventListener('submit', (e) => {
     e.preventDefault();
     const texto = inputMensagem.value.trim();
-    if (!texto || !conectado || !socket || socket.readyState !== WebSocket.OPEN) return;
+    if (!chatAtual || !texto || !conectado || !socket || socket.readyState !== WebSocket.OPEN) return;
 
     let destinatario = null;
     if (chatAtual !== 'global') {
       const usuarioDestino = usuarios.find(u => idPrivado(u.id) === chatAtual);
-      if (!usuarioDestino) return;
+      if (!usuarioDestino || !new Contas().contatos().includes(usuarioDestino.id)) return;
       destinatario = usuarioDestino.username;
     }
 
@@ -332,6 +347,56 @@ document.addEventListener('DOMContentLoaded', () => {
     inputMensagem.focus();
   });
 
+  // Diretório de pessoas, independente do status online.
+  const dialogPessoas = document.getElementById('dialog-pessoas');
+  const buscaPessoas = document.getElementById('busca-pessoas');
+  const resultadoPessoas = document.getElementById('resultado-pessoas');
+  const statusContato = document.getElementById('status-contato');
+  document.getElementById('btn-adicionar-pessoas').addEventListener('click', () => {
+    buscaPessoas.value = '';
+    statusContato.textContent = '';
+    renderPessoas();
+    dialogPessoas.showModal();
+    buscaPessoas.focus();
+  });
+  document.getElementById('btn-fechar-pessoas').addEventListener('click', () => dialogPessoas.close());
+  buscaPessoas.addEventListener('input', renderPessoas);
+  window.addEventListener('storage', evento => {
+    if (evento.key === 'contasChat') renderSidebar();
+  });
+
+  function renderPessoas() {
+    resultadoPessoas.replaceChildren();
+    const termo = buscaPessoas.value.trim().toLocaleLowerCase('pt-BR');
+    const contatos = new Contas().contatos();
+    const pessoas = usuarios.filter(u => u.id !== meuId && !contatos.includes(u.id) &&
+      (u.username.toLocaleLowerCase('pt-BR').includes(termo) || String(u.id) === termo))
+      .sort((a, b) => a.username.localeCompare(b.username));
+    for (const pessoa of pessoas) {
+      const item = document.createElement('li');
+      item.className = 'pessoa-item';
+      const nome = document.createElement('span');
+      nome.textContent = pessoa.username + ' · ID ' + pessoa.id + ' · ' + (pessoa.online ? 'Online' : 'Offline');
+      const botao = document.createElement('button');
+      botao.type = 'button';
+      botao.className = 'btn btn-primary';
+      botao.textContent = 'Adicionar';
+      botao.setAttribute('aria-label', 'Adicionar ' + pessoa.username);
+      botao.addEventListener('click', () => {
+        const erro = new Contas().adicionarContato(pessoa.id, usuarios);
+        statusContato.textContent = erro || pessoa.username + ' adicionado aos contatos.';
+        renderSidebar();
+      });
+      item.append(nome, botao);
+      resultadoPessoas.appendChild(item);
+    }
+    if (!pessoas.length) {
+      const vazio = document.createElement('li');
+      vazio.textContent = conectado ? 'Nenhuma pessoa disponível para adicionar.' : 'Conectando ao diretório de pessoas…';
+      resultadoPessoas.appendChild(vazio);
+    }
+  }
+
   // 7. Botão Sair
   btnSair.addEventListener('click', () => {
     new Contas().sair();
@@ -339,9 +404,16 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.replace('/login.html');
   });
 
+  atualizarEstadoConexao(false);
   // Inicializa a interface e conecta
   renderSidebar();
   renderMensagens();
+  try {
+    await new Contas().migrarContasAntigas();
+  } catch {
+    document.getElementById('msg-erro').textContent = 'Não foi possível atualizar o diretório das contas antigas. Recarregue a página para tentar novamente.';
+    document.getElementById('msg-erro').style.display = 'block';
+  }
   conectar();
 });
 

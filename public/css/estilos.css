@@ -30,6 +30,92 @@
   box-sizing: border-box;
 }
 
+#dialog-pessoas {
+  margin: auto;
+  width: min(36rem, calc(100% - 2rem));
+  max-height: 85vh;
+  max-height: 85dvh;
+  overflow-y: auto;
+  padding: 1.25rem;
+  border: 1px solid #464d56;
+  border-radius: 0.75rem;
+  background: #1a1a2e;
+  color: #ddd;
+}
+
+#dialog-pessoas::backdrop { background: rgb(0 0 0 / 65%); }
+.pessoa-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-block: 0.75rem;
+  border-bottom: 1px solid #464d56;
+}
+.pessoa-item span { min-width: 0; overflow-wrap: anywhere; flex: 1 1 12rem; }
+#btn-adicionar-pessoas { flex-shrink: 0; min-height: 44px; }
+.contato-item {
+  position: relative;
+  margin-bottom: 0.4rem;
+}
+.contato-item .chat-item {
+  margin-bottom: 0;
+  height: 100%;
+  min-height: 60px;
+  padding-right: 3.25rem;
+}
+.btn-remover-contato {
+  position: absolute;
+  top: 50%;
+  right: 0.25rem;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease, opacity 0.15s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .contato-item .btn-remover-contato {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .contato-item:hover .btn-remover-contato,
+  .contato-item:focus-within .btn-remover-contato {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+.btn-remover-contato:hover,
+.btn-remover-contato:focus-visible {
+  color: #ff5c6c;
+  background: rgb(255 92 108 / 12%);
+}
+.btn-remover-contato:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
+}
+.icone-lixeira {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
 }

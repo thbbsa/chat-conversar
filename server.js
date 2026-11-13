@@ -13,6 +13,39 @@ const server = http.createServer(app);
 const wss = new WebSocketServer({ server, path: '/ws', maxPayload: 16 * 1024 });
 const conexoes = new Map();
 
+app.use(express.json({ limit: '4kb' }));
+// O diretório público contém apenas ID e nome; as contas continuam locais.
+app.post('/api/usuarios', (req, res) => {
+  const nome = req.body?.username;
+  if (typeof nome !== 'string' || nome.trim().length < 3 || nome.trim().length > 40) {
+    return res.status(400).json({ erro: 'Nome inválido.' });
+  }
+  try {
+    const usuario = obterUsuario(nome.trim());
+    res.json({ id: usuario.id, username: usuario.username });
+  } catch {
+    res.status(500).json({ erro: 'Não foi possível salvar o usuário.' });
+  }
+});
+
+function obterUsuario(nome) {
+  const existente = dados.usuarios.find(u => u.username.toLowerCase() === nome.toLowerCase());
+  if (existente) return existente;
+  const usuario = { id: dados.proximoIdUsuario++, username: nome };
+  dados.usuarios.push(usuario);
+  try {
+    salvarDados();
+  } catch (erro) {
+    dados.usuarios.pop();
+    dados.proximoIdUsuario--;
+    throw erro;
+  }
+  for (const client of conexoes.keys()) {
+    enviar(client, { type: 'user_available', ...usuario, online: false });
+  }
+  return usuario;
+}
+
 app.use(express.static(frontend));
 app.get(['/', '/login'], (_req, res) => res.sendFile(path.join(frontend, 'login.html')));
 app.get('/cadastro', (_req, res) => res.sendFile(path.join(frontend, 'cadastro.html')));
@@ -34,19 +67,11 @@ wss.on('connection', (ws) => {
   function registrar(nome) {
     if (typeof nome !== 'string' || nome.trim().length < 3 || nome.length > 40) return;
     nome = nome.trim();
-    usuario = dados.usuarios.find(item => item.username.toLowerCase() === nome.toLowerCase());
-    if (!usuario) {
-      usuario = { id: dados.proximoIdUsuario++, username: nome };
-      dados.usuarios.push(usuario);
-      try {
-        salvarDados();
-      } catch {
-        dados.usuarios.pop();
-        dados.proximoIdUsuario--;
-        usuario = null;
-        ws.close(1011, 'Erro ao salvar');
-        return;
-      }
+    try {
+      usuario = obterUsuario(nome);
+    } catch {
+      ws.close(1011, 'Erro ao salvar');
+      return;
     }
     const jaOnline = online(usuario.id);
     conexoes.set(ws, usuario);

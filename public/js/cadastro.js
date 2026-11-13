@@ -4,12 +4,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const inputSenha = document.getElementById('senha');
   const msgErro = document.getElementById('msg-erro');
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     msgErro.style.display = 'none';
     msgErro.textContent = '';
 
-    const erro = new Contas().cadastrar(inputNome.value, inputSenha.value);
+    const botao = form.querySelector('button[type="submit"]');
+    if (botao.disabled) return;
+    botao.disabled = true;
+    const erro = await new Contas().cadastrar(inputNome.value, inputSenha.value);
+    botao.disabled = false;
     if (erro) {
       msgErro.textContent = erro;
       msgErro.style.display = 'block';

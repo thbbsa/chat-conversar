@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 const senha = document.getElementById('senha');
-document.getElementById('btn-olho').addEventListener('click', () => {
+document.getElementById('btn-olho')?.addEventListener('click', () => {
   senha.type = senha.type === 'password' ? 'text' : 'password';
 });
 senha.addEventListener('input', () => {
@@ -46,5 +46,6 @@ senha.addEventListener('input', () => {
   if (v.length >= 8) n++;
   if (/[A-Z]/.test(v) && /[a-z]/.test(v)) n++;
   if (/\d/.test(v) && /[^A-Za-z0-9]/.test(v)) n++;
-  document.getElementById('forca').dataset.nivel = n;
+  const forca = document.getElementById('forca');
+  if (forca) forca.dataset.nivel = n;
 });
