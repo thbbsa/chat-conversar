@@ -1,6 +1,6 @@
 {
-  "proximoIdUsuario": 10,
-  "proximoIdMensagem": 19,
+  "proximoIdUsuario": 11,
+  "proximoIdMensagem": 20,
   "usuarios": [
     {
       "id": 1,
@@ -37,6 +37,10 @@
     {
       "id": 9,
       "username": "pedro"
+    },
+    {
+      "id": 10,
+      "username": "thbbsaa"
     }
   ],
   "mensagens": [
@@ -201,6 +205,15 @@
       "conteudo": "oi",
       "timestamp": "22:59",
       "data": "2026-11-13T01:59:07.858Z"
+    },
+    {
+      "id": 19,
+      "chatId": "2-10",
+      "remetenteId": 10,
+      "destinatarioId": 2,
+      "conteudo": "eae",
+      "timestamp": "12:02",
+      "data": "2026-11-13T15:02:55.385Z"
     }
   ]
 }
