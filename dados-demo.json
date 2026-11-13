@@ -1,6 +1,6 @@
 {
   "proximoIdUsuario": 10,
-  "proximoIdMensagem": 18,
+  "proximoIdMensagem": 19,
   "usuarios": [
     {
       "id": 1,
@@ -192,6 +192,15 @@
       "conteudo": "eai",
       "timestamp": "21:46",
       "data": "2026-11-13T00:46:05.813Z"
+    },
+    {
+      "id": 18,
+      "chatId": "1-2",
+      "remetenteId": 1,
+      "destinatarioId": 2,
+      "conteudo": "oi",
+      "timestamp": "22:59",
+      "data": "2026-11-13T01:59:07.858Z"
     }
   ]
 }

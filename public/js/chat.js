@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       remover.type = 'button';
       remover.className = 'btn-remover-contato';
       const iconeLixeira = document.createElement('span');
-      iconeLixeira.className = 'icone-lixeira';
+      iconeLixeira.className = 'ui-icon';
       iconeLixeira.textContent = 'delete';
       iconeLixeira.setAttribute('aria-hidden', 'true');
       remover.appendChild(iconeLixeira);

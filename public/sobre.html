@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Conheça o Chat Conversar e saiba como adicionar contatos e trocar mensagens.">
+  <title>Sobre o Chat Conversar</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/estilos.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&amp;display=block">
+</head>
+<body>
+  <nav class="navbar navbar-expand navbar-dark px-3 px-md-4" aria-label="Navegação principal">
+    <div class="container-fluid p-0">
+      <a class="navbar-brand" href="/"><img class="marca-logo" src="/img/logo-chat-conversar.png" alt="Chat Conversar"></a>
+      <div class="d-flex gap-2">
+        <a href="/chat.html" class="btn btn-outline-light btn-sm"><span class="ui-icon" aria-hidden="true">chat</span> Chat</a>
+        <a href="/sobre.html" class="btn btn-outline-light btn-sm active" aria-current="page"><span class="ui-icon" aria-hidden="true">info</span> Sobre</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="sobre-container">
+    <header class="sobre-apresentacao">
+      <h1>Sobre o Chat Conversar</h1>
+      <p>Um projeto acadêmico para aprender como funciona um chat em tempo real. Crie uma conta, monte sua lista de contatos e troque mensagens privadas.</p>
+      <a href="/chat.html" class="btn btn-primary">Ir para o chat</a>
+    </header>
+
+    <section aria-labelledby="como-funciona">
+      <h2 id="como-funciona" class="h4 mb-3">Como funciona</h2>
+      <div class="sobre-recursos">
+        <article>
+          <h3 class="h5">Encontre pessoas</h3>
+          <p>Use <strong>Adicionar pessoas</strong> para buscar contas por nome ou ID, mesmo quando estiverem offline.</p>
+        </article>
+        <article>
+          <h3 class="h5">Converse em particular</h3>
+          <p>Escolha um contato na barra lateral. As mensagens chegam em tempo real quando a pessoa está online e ficam no histórico para ela ler ao voltar.</p>
+        </article>
+        <article>
+          <h3 class="h5">Organize seus contatos</h3>
+          <p>A barra lateral mostra quem você adicionou. Use a lixeira para remover um contato. Se adicioná-lo novamente, você poderá retomar o histórico.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="sobre-dados" aria-labelledby="dados-conta">
+      <h2 id="dados-conta" class="h4">Onde ficam seus dados?</h2>
+      <p>A conta e a lista de contatos ficam salvas neste navegador. O servidor guarda as mensagens para que elas possam ser consultadas depois. Use um nome e uma senha fictícios nesta demonstração.</p>
+    </section>
+  </main>
+</body>
+</html>
